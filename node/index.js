@@ -20,8 +20,16 @@ app.get("/secret", function(req, res){
 //Task3
 app.get("/calc", function(req, res){
   try {
-    let s = req.url.split("?");
-    let caliculateResult = eval("let result = " + s[1] + "; exports.result = result")
+    let recivedValue = req.url.split("?");
+    let caliculateFormula = recivedValue[1];
+    
+    //文字、数式以外のものが含まれていたらエラー
+    let excludePattern = /[^(\+\-\*\/0-9)]/g;
+    if (caliculateFormula.match(excludePattern) ) {
+      throw e;
+    }
+
+    let caliculateResult = eval("let result = " + caliculateFormula + "; exports.result = result")
     res.send(String(caliculateResult.result));
   } catch (e) {
     res.send("ERROR");
