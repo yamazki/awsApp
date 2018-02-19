@@ -36,23 +36,29 @@ app.get("/calc", function(req, res){
     res.send("ERROR");
   }
 });
-
 //Task4
 app.get("/stocker", function(req, res){
-  console.log(req.query);
-  console.log(req.query.function);
-  console.log(req.query.name);
-  console.log(req.query.amount);
-  switch (req.query.function) {
-    case "addstock":
-      Stocker.addstock(req.query.name, req.query.amount);
-      break;
-    case "checkstock":
-    case "sell":
-    case "checksales":
-    case "deleteall":
+  let sales = 0;
+  try {
+    switch (req.query.function) {
+      case "addstock":
+        Stocker.addStock(req.query.name, req.query.amount);
+        break;
+      case "checkstock":
+        res.send(Stocker.checkStock(req.query.name));
+        break;
+      case "sell":
+        Stocker.sell(req.query.name, req.query.amount, req.query.price);
+        break;
+      case "checksales":
+      case "deleteall":
+        sales = 0;
+        Stocker.deleteAll();
+        break;
+    }
+  } catch (e) {
+    res.send("ERROR");
   }
-  res.send("SUCCESS");
 });
 
 var server = app.listen(80, function(){
