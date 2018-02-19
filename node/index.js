@@ -37,26 +37,34 @@ app.get("/calc", function(req, res){
   }
 });
 //Task4
+let sales = 0;
 app.get("/stocker", function(req, res){
-  let sales = 0;
   try {
     switch (req.query.function) {
       case "addstock":
+        if (!Number.isInteger(Number(req.query.amount))) {
+          throw e;
+           }
         Stocker.addStock(req.query.name, req.query.amount);
+        res.send();
         break;
       case "checkstock":
         res.send(Stocker.checkStock(req.query.name));
         break;
       case "sell":
-        sales = Stocker.sell(req.query.name, req.query.amount, req.query.price);
+        sales += Stocker.sell(req.query.name, req.query.amount, req.query.price);
+        console.log(sales);
+        res.send();
         break;
       case "checksales":
         res.send("sales: "+sales);
       case "deleteall":
         sales = 0;
         Stocker.deleteAll();
+        res.send();
         break;
     }
+    console.log("test");
   } catch (e) {
     res.send("ERROR");
   }

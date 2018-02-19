@@ -1,9 +1,8 @@
 const fs = require("fs");
-const csv = require("csv");
 
 module.exports = class Stocker {
 
-  static addStock(name, amount){
+  static addStock(name, amount = 1){
     let exsitedGoods = false;
     let goodsList = Stocker.getGoodsList();
 
@@ -27,27 +26,44 @@ module.exports = class Stocker {
     fs.writeFileSync("./stock.csv" ,csvText );
   }
 
-  static checkStock(name){
+  static checkStock(name = ""){
     let goodsList = Stocker.getGoodsList();
-    for (let num in goodslist) {
-      if (goodslist[num][0] == name) {
-        return goodslist[num][1];
+
+    if (name == "") {
+      goodsList.sort();
+      let list = [];
+      for (let num in goodsList) {
+         list += goodsList[num].toString().replace(/,/g , ": ") + "\n";
+      }
+      return list;
+    }
+
+    for (let num in goodsList) {
+      if (goodsList[num][0] == name) {
+        return goodsList[num][0] + " :" + goodsList[num][1] + "\n";
       }
     }
   }
 
-  static sell(name, amount, price){
+  static sell(name, amount = 1, price = 0){
     let goodsList = Stocker.getGoodsList();
-    for (let num in goodslist) {
-      if (goodslist[num][0] == name) {
+    for (let num in goodsList) {
+      if (goodsList[num][0] == name) {
         goodsList[num][1] = String(Number(goodsList[num][1]) - Number(amount));
       }
     }
+
+    let csvText = "";
+    for (let num in goodsList) {
+      csvText += goodsList[num].toString() + "\n";
+    }
+    fs.writeFileSync("./stock.csv" ,csvText );
+
     return amount * price;
   }
 
   static deleteAll(){
-    fs.writeFileSync("./stock.csv" ,csvText );
+    fs.writeFileSync("./stock.csv" ,"");
   }
   
   static getGoodsList(){
