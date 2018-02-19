@@ -29,18 +29,21 @@ module.exports = class Stocker {
 
   static checkStock(name){
     let goodsList = Stocker.getGoodsList();
-    for (let num in goodsList) {
-      if (goodsList[num][0] == name) {
-        console.log(goodsList[num][1]);
-        return goodsList[num][1];
+    for (let num in goodslist) {
+      if (goodslist[num][0] == name) {
+        return goodslist[num][1];
       }
     }
   }
 
   static sell(name, amount, price){
-  }
-
-  static checkSales(){
+    let goodsList = Stocker.getGoodsList();
+    for (let num in goodslist) {
+      if (goodslist[num][0] == name) {
+        goodsList[num][1] = String(Number(goodsList[num][1]) - Number(amount));
+      }
+    }
+    return amount * price;
   }
 
   static deleteAll(){

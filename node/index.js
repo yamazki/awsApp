@@ -48,9 +48,10 @@ app.get("/stocker", function(req, res){
         res.send(Stocker.checkStock(req.query.name));
         break;
       case "sell":
-        Stocker.sell(req.query.name, req.query.amount, req.query.price);
+        sales = Stocker.sell(req.query.name, req.query.amount, req.query.price);
         break;
       case "checksales":
+        res.send("sales: "+sales);
       case "deleteall":
         sales = 0;
         Stocker.deleteAll();
