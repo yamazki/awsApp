@@ -2,6 +2,7 @@ const app = require("express")();
 const http = require("http").Server(app);
 const basicAuth = require("basic-auth-connect");
 const eval = require("eval")
+const Stocker = require("./stocker.js");
 
 //Task1
 app.get("/", function(req, res){
@@ -36,6 +37,23 @@ app.get("/calc", function(req, res){
   }
 });
 
+//Task4
+app.get("/stocker", function(req, res){
+  console.log(req.query);
+  console.log(req.query.function);
+  console.log(req.query.name);
+  console.log(req.query.amount);
+  switch (req.query.function) {
+    case "addstock":
+      Stocker.addstock(req.query.name, req.query.amount);
+      break;
+    case "checkstock":
+    case "sell":
+    case "checksales":
+    case "deleteall":
+  }
+  res.send("SUCCESS");
+});
 
 var server = app.listen(80, function(){
     console.log("Node.js is listening to PORT:" + server.address().port);
